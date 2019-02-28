@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学校管理</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/javascripts/bootstrap4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.cookie.min.js"></script>
+    <script src="/javascripts/art-template.js"></script>
+    <script src="/javascripts/jquery.validate.js"></script>
+    <script src="/javascripts/utils.js"></script>
+    <script src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary bd-navbar">
+        <a class="navbar-brand" href="/"><i class="fa fa-home fs25"></i>学生管理系统</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline">
+                <button class="btn btn-primary" id="btnLogout"><i class="fa fa-window-close"></i>注销</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid pd60 clearfix">
+        <div class="left float-left">
+            <div id="menu" role="tablist" aria-multiselectable="true">
+                <div class="card">
+                    <div class="card-header" role="tab" id="h1">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" data-parent="#menu" href="#c1" aria-expanded="true" aria-controls="c1">
+                                <i class="fa fa-bars"></i>功能列表
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="c1" class="collapse show" role="tabpanel" aria-labelledby="h1">
+                        <div class="card-body nopd">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="/user/index.html">
+                                        <i class="fa fa-user"></i>用户管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/collage/index.html">
+                                        <i class="fa fa-university"></i>学校管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/depart/index.html">
+                                        <i class="fa fa-bell"></i>院系管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/cls/index.html">
+                                        <i class="fa fa-bookmark"></i>班级管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/stu/index.html">
+                                        <i class="fa fa-female"></i>学生管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/course/index.html">
+                                        <i class="fa fa-clock-o"></i>课程管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/score/index.html">
+                                        <i class="fa fa-bar-chart"></i>成绩管理
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right float-right"></div>
+
+        <script id="tmp" type="text/html">
+            <form id="collageForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="collageName">校名：</label>
+                        <input type="text" class="form-control" id="collageName" name="collageName" value="{{ data ? data.collageName : ''}}">
+                        <input type="hidden" name="id" id="id" value="{{ data ? data._id : ''}}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="collageTelephone">校长：</label>
+                        <input type="text" class="form-control" id="headmaster" name="headmaster" value="{{ data ? data.headmaster : ''}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="collageAddress">地址：</label>
+                    <input type="text" class="form-control" id="collageAddress" name="collageAddress" value="{{ data ? data.collageAddress : ''}}">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="collageTelephone">联系电话：</label>
+                        <input type="text" class="form-control" id="collageTelephone" name="collageTelephone" value="{{ data ? data.collageTelephone : ''}}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="collageTelephone">网站：</label>
+                        <input type="text" class="form-control" id="collageWebsite" name="collageWebsite" value="{{ data ? data.collageWebsite : ''}}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="collageTelephone">建校日期：</label>
+                        <input type="text" class="form-control" id="buildTime" name="buildTime" onclick="WdatePicker()"
+                            value="{{ data ? data.buildTime : '' | dateFormat 'yyyy-MM-dd'}}">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnSave"><i class="fa fa-save"></i>保存</button>
+            </form>
+        </script>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Add rows here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $(function () {
+            $.getJSON('/collages/getOne').done(function (data) {
+                $('.right').html(template('tmp', { data: data.entry }));
+            })
+
+            $('.right').on('click', '#btnSave', function () {
+                $('#collageForm').validate({
+                    rules: {
+                        // 对应是的form表单的输入框的name属性，而非id属性
+                        collageName: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        collageName: '请输入校名'
+                    },
+                    // 当验证通过时执行submitHandler方法。
+                    submitHandler: function (form) {
+                        /* $.post('/collages/add', {
+                            id: $('#id').val(),
+                            collageName: $('#collageName').val(),
+                            collageAddress: $('#collageAddress').val(),
+                            collageTelephone: $('#collageTelephone').val(),
+                            headmaster: $('#headmaster').val(),
+                            collageWebsite: $('#collageWebsite').val(),
+                            buildTime: $('#buildTime').val(),
+                        }).done(function (data) {
+                            $('#modelId .modal-body').text(data.message);
+                            $('#modelId').modal('show');
+                        }).fail(function (err) {
+                            console.log(err);
+                        }) */
+
+                        console.log(form)
+                        console.log($(form))
+
+                        // serialize()把form表单中的数据进行序列化。前提：form表单中数据容器必须拥有name属性
+                        // 序列化：把数据从一种数据格式转换成另外一种数据格式，比如：把字符串转换成json格式，就是序列化，json格式转换成字符串则称为反序列化。
+                        $.post('/collages/add', $(form).serialize()).done(function (data) {
+                            $('#modelId .modal-body').text(data.message);
+                            $('#modelId').modal('show');
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                });
+            })
+        })
+    </script>
+</body>
+
+</html>

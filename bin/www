@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+// 导入app.js，用来在创建服务器时设置端口。
+var app = require('../app');
+// 导入debug模块，用来调试服务器端代码。
+var debug = require('debug')('student:server');
+// 导入node自带的http模块，用来创建并启动服务器
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+// 给服务器设置端口，修改端口请修改此处。
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+// 使用导入的app应用程序实例配合http模块来创建服务器
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+// 发起监听
+server.listen(port);
+// 捕获服务器在运行过程中的错误
+server.on('error', onError);
+// 执行监听过程事件
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+// 此方法用来设置服务器端口。
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+// 捕获错误事件对应的回调函数
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+// 监听过程事件对应的回调函数
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

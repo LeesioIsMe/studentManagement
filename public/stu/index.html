@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学生管理</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/javascripts/bootstrap4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.cookie.min.js"></script>
+    <script src="/javascripts/art-template.js"></script>
+    <script src="/javascripts/jquery.validate.js"></script>
+    <script src="/javascripts/utils.js"></script>
+    <script src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary bd-navbar">
+        <a class="navbar-brand" href="/"><i class="fa fa-home fs25"></i>学生管理系统</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline">
+                <button class="btn btn-primary" id="btnLogout"><i class="fa fa-window-close"></i>注销</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid pd60 clearfix">
+        <div class="left float-left">
+            <div id="menu" role="tablist" aria-multiselectable="true">
+                <div class="card">
+                    <div class="card-header" role="tab" id="h1">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" data-parent="#menu" href="#c1" aria-expanded="true" aria-controls="c1">
+                                <i class="fa fa-bars"></i>功能列表
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="c1" class="collapse show" role="tabpanel" aria-labelledby="h1">
+                        <div class="card-body nopd">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="/user/index.html">
+                                        <i class="fa fa-user"></i>用户管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/collage/index.html">
+                                        <i class="fa fa-university"></i>学校管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/depart/index.html">
+                                        <i class="fa fa-bell"></i>院系管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/cls/index.html">
+                                        <i class="fa fa-bookmark"></i>班级管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/stu/index.html">
+                                        <i class="fa fa-female"></i>学生管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/course/index.html">
+                                        <i class="fa fa-clock-o"></i>课程管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/score/index.html">
+                                        <i class="fa fa-bar-chart"></i>成绩管理
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right float-right">
+            <a class="btn btn-primary" data-toggle="collapse" href="#search" role="button" aria-expanded="false"
+                aria-controls="collapseExample">
+                <i class="fa fa-search"></i>查询条件
+            </a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i>添加</button>
+
+            <div id="search" class="collapse">
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="searchKey">姓名或学号：</label>
+                            <input type="text" class="form-control" id="searchKey">
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group" id="classSearchBox"></div>
+                            <script id="tmpSearchClass" type="text/html">
+                                <label for="searchClsId">所属班级：</label>
+                                <select class="form-control" name="searchClsId" id="searchClsId">
+                                <option value="all">请选择...</option>
+                                {{each data c i}}
+                                <option value="{{c._id}}">{{c.className }}</option>
+                                {{/each}}
+                                </select>
+                            </script>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="searchSex">性别：</label>
+                            <select class="form-control" name="searchSex" id="searchSex">
+                                <option value="all">请选择...</option>
+                                <option value="true">男</option>
+                                <option value="false">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="beginDate">开始日期：</label>
+                                    <input type="text" class="form-control" id="beginDate" onclick="WdatePicker()">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="endDate">结束日期：</label>
+                                    <input type="text" class="form-control" id="endDate" onclick="WdatePicker()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary middle" id="btnSearch"><i class="fa fa-search"></i>搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box"></div>
+
+            <script id="tmp" type="text/html">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="th1">
+                                <input class="form-check-input selectAll" type="checkbox">
+                            </th>
+                            <th>所属班级</th>
+                            <th>姓名</th>
+                            <th>学号</th>
+                            <th>性别</th>
+                            <th>年龄</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{each data d i}}
+                            <tr>
+                                <td class="td1">
+                                    <input class="form-check-input selectSingle" type="checkbox" value="{{d._id}}">
+                                </td>
+                                <td>{{d.clsId.className}}</td>
+                                <td>{{d.stuName}}</td>
+                                <td>{{d.stuNo}}</td>
+                                <td>{{d.sex?'男':'女'}}</td>
+                                <td>{{d.age}}</td>
+                                <td class="w180">{{d.createTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+                                <td class="w250">
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#detail" data-id="{{d._id}}"><i class="fa fa-list"></i>详情</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit" data-id="{{d._id}}"><i class="fa fa-edit"></i>编辑</button>
+                                    <button type="button" class="btn btn-danger btn-sm delete" data-id="{{d._id}}"><i class="fa fa-remove"></i>删除</button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-danger" id="btnDeleteMore"><i class="fa fa-remove"></i>批量删除</button>
+                    </div>
+                    <div class="col-sm-10 clearfix">
+                        <nav aria-label="Page navigation float-right">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item {{ currPage === 1 ? 'disabled' : ''}}">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Previous" onclick="getData({{currPage - 1}}, {{pageSize}})">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                {{each pages p i}}
+                                <li class="page-item {{ p === currPage ? 'active': ''}}"><a class="page-link" href="javascript:void(0);" onclick="getData({{p}}, {{pageSize}})">{{p}}</a></li>
+                                {{/each}}
+                                <li class="page-item {{ currPage === totalPage ? 'disabled' : ''}}">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Next" onclick="getData({{currPage + 1}}, {{pageSize}})">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </script>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">添加</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form id="addForm">
+                                <div class="form-group">
+                                    <div class="form-group" id="classBox"></div>
+                                    <script id="tmpClass" type="text/html">
+                                        <label for="clsId">所属班级：</label>
+                                        <select class="form-control" name="clsId" id="clsId">
+                                            {{each data d i}}
+                                            <option value="{{d._id}}">{{d.className}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </script>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stuName">姓名：</label>
+                                    <input type="text" class="form-control" id="stuName" name="stuName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="stuNo">学号：</label>
+                                    <input type="text" class="form-control" id="stuNo" name="stuNo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sex">性别：</label>
+                                    <select name="sex" id="sex" class="form-control">
+                                        <option value="true">男</option>
+                                        <option value="false">女</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="age">年龄：</label>
+                                    <input type="number" class="form-control" id="age" name="age">
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthday">生日：</label>
+                                    <input type="text" class="form-control" id="birthday" name="birthday" onclick="WdatePicker()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">联系手机：</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nativePlace">籍贯：</label>
+                                    <input type="text" class="form-control" id="nativePlace" name="nativePlace">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnSave" hidden><i class="fa fa-save"></i>保存</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnTemp"><i class="fa fa-save"></i>保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">编辑</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"></div>
+
+                        <script id="tmpEdit" type="text/html">
+                            <form id="editForm">
+                                <div class="form-group">
+                                  <label for="editClsId">所属班级：</label>
+                                  <select class="form-control" name="editClsId" id="editClsId">
+                                    {{each classes c i}}
+                                    <option value="{{c._id}}" {{ data.clsId._id==c._id?'selected':''}}>{{c.className}}</option>
+                                    {{/each}}
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editStuName">姓名：</label>
+                                    <input type="text" class="form-control" id="editStuName" name="editStuName" value="{{data.stuName}}">
+                                    <input type="hidden" id="id" name="id" value="{{data._id}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editStuNo">学号：</label>
+                                    <input type="text" class="form-control" id="editStuNo" name="editStuNo" value="{{data.stuNo}}">
+                                    <input type="hidden" id="oldStuNo" name="oldStuNo" value="{{data.stuNo}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editSex">性别：</label>
+                                    <select name="editSex" id="editSex" class="form-control">
+                                        <option value="true" {{data.sex?'selected':''}}>男</option>
+                                        <option value="false" {{data.sex?'':'selected'}}>女</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAge">年龄：</label>
+                                    <input type="number" class="form-control" id="editAge" name="editAge" value="{{data.age}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editBirthday">生日：</label>
+                                    <input type="text" class="form-control" id="editBirthday" name="editBirthday" onclick="WdatePicker()" value="{{data.birthday | dateFormat 'yyyy-MM-dd'}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editPhone">联系手机：</label>
+                                    <input type="tel" class="form-control" id="editPhone" name="editPhone" value="{{data.phone}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editNativePlace">籍贯：</label>
+                                    <input type="text" class="form-control" id="editNativePlace" name="editNativePlace" value={{data.nativePlace}}>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnEdit" hidden><i class="fa fa-save"></i>保存</button>
+                            </form>
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnEditTemp"><i class="fa fa-save"></i>保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">详情</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"></div>
+
+                        <script id="tmpDetail" type="text/html">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">所属班级：{{data.clsId.className}}</li>
+                                <li class="list-group-item">姓名：{{data.stuName}}</li>
+                                <li class="list-group-item">学号：{{data.stuNo}}</li>
+                                <li class="list-group-item">性别：{{data.sex?'男':'女'}}</li>
+                                <li class="list-group-item">年龄：{{data.age}}</li>
+                                <li class="list-group-item">生日：{{data.birthday | dateFormat 'yyyy-MM-dd'}}</li>
+                                <li class="list-group-item">联系手机：{{data.phone}}</li>
+                                <li class="list-group-item">籍贯：{{data.nativePlace}}</li>
+                                <li class="list-group-item">创建时间：{{data.createTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</li>
+                                <li class="list-group-item">最后更新时间：{{data.updateTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</li>
+                            </ul>
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i>关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Add rows here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Add rows here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnDelete"><i class="fa fa-check"></i>确定</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var currPage = 1;
+        var pageSize = 5;
+        var deleteMore = false;
+
+        function getData(page, pageSize) {
+            $.getJSON(`/students/getStus/${page}/${pageSize}/`, {
+                searchKey: $('#searchKey').val(),
+                clsId: $('#searchClsId').val() || 'all',
+                sex: $('#searchSex').val() || 'all',
+                beginAge: $('#beginAge').val(),
+                endAge: $('#endAge').val(),
+                beginBirthday: $('#beginBirthday').val(),
+                endBirthday: $('#endBirthday').val(),
+                beginDate: $('#beginDate').val(),
+                endDate: $('#endDate').val()
+            }).done(function (data) {
+                if (data.code === 200) {
+                    $('.box').html(template('tmp', {
+                        data: data.jsonData,
+                        pages: data.pages,
+                        currPage: data.currPage,
+                        totalPage: data.totalPage,
+                        pageSize: data.pageSize
+                    }));
+                }
+            }).fail(function (err) {
+                console.log(err);
+            })
+        }
+
+        $(function () {
+            getData(currPage, pageSize);
+
+            var classes = [];
+            $.getJSON('/classes/getClasses').done(function (data) {
+                if (data.code == 200) {
+                    classes = data.jsonData;
+                    $('#classSearchBox').html(template('tmpSearchClass', { data: classes }));
+                }
+            })
+
+            $('#add').on('show.bs.modal', function (e) {
+                $('#className').val('');
+                $('label.error').hide();
+
+                $('#classBox').html(template('tmpClass', { data: classes }));
+            })
+
+            $('#btnSave').click(function () {
+                $('#addForm').validate({
+                    rules: {
+                        stuName: { required: true },
+                        sex: { required: true },
+                        stuNo: {
+                            required: true,
+                            remote: {
+                                url: '/students/checkStuNo',
+                                type: 'POST',               //数据发送方式
+                                dataType: 'json',           //接受数据格式   
+                                data: {                     //要传递的数据
+                                    stuNo: function () {
+                                        return $("#stuNo").val();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    messages: {
+                        stuName: '请输入姓名',
+                        sex: '请选择性别',
+                        stuNo: {
+                            required: '请输入学号',
+                            remote: '学号已存在'
+                        }
+                    },
+                    submitHandler: function (form) {
+                        $.post('/students/addStu', {
+                            clsId: $('#clsId').val(),
+                            stuName: $('#stuName').val(),
+                            stuNo: $('#stuNo').val(),
+                            sex: $('#sex').val(),
+                            age: $('#age').val(),
+                            birthday: $('#birthday').val(),
+                            phone: $('#phone').val(),
+                            nativePlace: $('#nativePlace').val()
+                        }).done(function (data) {
+                            if (data.code !== 200) {
+                                $('#modelId .modal-body').text(data.message);
+                                $('#modelId').modal('show');
+                                return;
+                            }
+                            $('#add').modal('hide');
+                            location.reload();
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                });
+            })
+
+            $('#btnTemp').click(function () {
+                $('#btnSave').trigger('click');
+            })
+
+            $('#edit').on('shown.bs.modal', function (e) {
+                $('label.error').hide();
+                var id = $(e.relatedTarget).data('id');
+                $.getJSON(`/students/getStu/${id}`).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#edit').modal('hide');
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        return;
+                    }
+
+                    $('#edit .container-fluid').html(template('tmpEdit', { data: data.entry, classes }));
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+            $('#edit .modal-body').on('click', '#btnEdit', function () {
+                $('#editForm').validate({
+                    rules: {
+                        editStuName: { required: true },
+                        editSex: { required: true },
+                        editStuNo: {
+                            required: true,
+                            remote: {
+                                url: '/students/checkStuNoEdit',
+                                type: 'POST',               //数据发送方式
+                                dataType: 'json',           //接受数据格式   
+                                data: {                     //要传递的数据
+                                    stuNo: function () {
+                                        return $("#editStuNo").val();
+                                    },
+                                    oldStuNo: function () {
+                                        return $('#oldStuNo').val();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    messages: {
+                        editStuName: '请输入姓名',
+                        editSex: '请选择性别',
+                        editStuNo: {
+                            required: '请输入学号',
+                            remote: '学号已存在'
+                        }
+                    },
+                    submitHandler: function (form) {
+                        var id = $('#id').val();
+                        $.post(`/students/editStu/${id}`, {
+                            clsId: $('#editClsId').val(),
+                            stuName: $('#editStuName').val(),
+                            stuNo: $('#editStuNo').val(),
+                            sex: $('#editSex').val(),
+                            age: $('#editAge').val(),
+                            birthday: $('#editBirthday').val(),
+                            phone: $('#editPhone').val(),
+                            nativePlace: $('#editNativePlace').val()
+                        }).done(function (data) {
+                            if (data.code !== 200) {
+                                $('#modelId .modal-body').text(data.message);
+                                $('#modelId').modal('show');
+                                return;
+                            }
+                            $('#edit').modal('hide');
+                            location.reload();
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                });
+            })
+
+            $('#btnEditTemp').click(function () {
+                $('#btnEdit').trigger('click');
+            })
+
+            $('#detail').on('show.bs.modal', function (e) {
+                var id = $(e.relatedTarget).data('id');
+                $.getJSON(`/students/getStu/${id}`).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        $('#edit').modal('hide');
+                        return;
+                    }
+                    $('#detail .container-fluid').html(template('tmpDetail', { data: data.entry }));
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+
+            $('.box').on('click', '.delete', function () {
+                deleteMore = false;
+                var id = $(this).data('id');
+                $('#delete .modal-body').text(`您确定要删除id为[${id}]的这条数据吗？`);
+                $('#btnDelete').data('id', id);
+                $('#delete').modal('show');
+            })
+
+            $('#btnDelete').click(function () {
+                var id = $(this).data('id');
+                var url = deleteMore ? `/students/removeStus/${id}` : `/students/removeStu/${id}`;
+                $.post(url).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        return;
+                    }
+                    $('#delete').modal('hide');
+                    location.reload();
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+            $('#btnSearch').click(function () {
+                getData(currPage, pageSize);
+            })
+
+            $('.box').on('click', '.selectAll', function () {
+                $('.selectSingle').prop('checked', $(this).prop('checked'));
+            })
+
+            $('.box').on('click', '.selectSingle', function () {
+                $('.selectAll').prop('checked', $('.selectSingle:not(:checked)').length == 0)
+            })
+
+            $('.box').on('click', '#btnDeleteMore', function () {
+                if ($('.selectSingle:checked').length == 0) {
+                    $('#modelId .modal-body').text('请选择要删除的数据！');
+                    $('#modelId').modal('show');
+                    return;
+                }
+                deleteMore = true;
+                var ids = '';
+                $('.selectSingle:checked').each(function (i, ele) {
+                    ids += $(ele).val() + ','
+                })
+                if (ids.length > 0) {
+                    ids = ids.substr(0, ids.length - 1);
+                }
+                $('#delete .modal-body').text(`您确定要删除这些数据吗？`);
+                $('#btnDelete').data('id', ids);
+                $('#delete').modal('show');
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学生管理系统</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/javascripts/bootstrap4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.cookie.min.js"></script>
+    <script src="/javascripts/art-template.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary bd-navbar">
+        <a class="navbar-brand" href="/"><i class="fa fa-home fs25"></i>学生管理系统</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline">
+                <button class="btn btn-primary" id="btnLogout"><i class="fa fa-window-close"></i>注销</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid pd60 clearfix">
+        <div class="left float-left">
+            <div id="menu" role="tablist" aria-multiselectable="true">
+                <div class="card">
+                    <div class="card-header" role="tab" id="h1">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" data-parent="#menu" href="#c1" aria-expanded="true" aria-controls="c1">
+                                <i class="fa fa-bars"></i>功能列表
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="c1" class="collapse show" role="tabpanel" aria-labelledby="h1">
+                        <div class="card-body nopd">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="/user/index.html">
+                                        <i class="fa fa-user"></i>用户管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/collage/index.html">
+                                        <i class="fa fa-university"></i>学校管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/depart/index.html">
+                                        <i class="fa fa-bell"></i>院系管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/cls/index.html">
+                                        <i class="fa fa-bookmark"></i>班级管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/stu/index.html">
+                                        <i class="fa fa-female"></i>学生管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/course/index.html">
+                                        <i class="fa fa-clock-o"></i>课程管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/score/index.html">
+                                        <i class="fa fa-bar-chart"></i>成绩管理
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right float-right">
+            <p>
+                本实例采用express框架，配合mongodb数据库实现学生管理。内部采用了md5加密，cookie-parser处理cookie，jQuery
+                AJAX请求数据，mongoose模块连接数据库，bootstrap4实现UI界面，art-template模板引擎渲染视图等等，旨在练习node平台开发，让学生了解基本的增删查改操作及分页查询效果的业务逻辑编写，关联查询操作。主要特点：客户端渲染，无刷新。
+            </p>
+        </div>
+    </div>
+
+
+    <script>
+        $(function () {
+            if (!$.cookie('loginName')) {
+                location.href = '/login.html';
+                return;
+            }
+
+            $('#btnLogout').click(function () {
+                $.post('/users/logout').done(function (data) {
+                    location.href = '/login.html';
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

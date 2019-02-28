@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>班级管理</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/javascripts/bootstrap4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.cookie.min.js"></script>
+    <script src="/javascripts/art-template.js"></script>
+    <script src="/javascripts/jquery.validate.js"></script>
+    <script src="/javascripts/utils.js"></script>
+    <script src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary bd-navbar">
+        <a class="navbar-brand" href="/"><i class="fa fa-home fs25"></i>学生管理系统</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline">
+                <button class="btn btn-primary" id="btnLogout"><i class="fa fa-window-close"></i>注销</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid pd60 clearfix">
+        <div class="left float-left">
+            <div id="menu" role="tablist" aria-multiselectable="true">
+                <div class="card">
+                    <div class="card-header" role="tab" id="h1">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" data-parent="#menu" href="#c1" aria-expanded="true" aria-controls="c1">
+                                <i class="fa fa-bars"></i>功能列表
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="c1" class="collapse show" role="tabpanel" aria-labelledby="h1">
+                        <div class="card-body nopd">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="/user/index.html">
+                                        <i class="fa fa-user"></i>用户管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/collage/index.html">
+                                        <i class="fa fa-university"></i>学校管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/depart/index.html">
+                                        <i class="fa fa-bell"></i>院系管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/cls/index.html">
+                                        <i class="fa fa-bookmark"></i>班级管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/stu/index.html">
+                                        <i class="fa fa-female"></i>学生管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/course/index.html">
+                                        <i class="fa fa-clock-o"></i>课程管理
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="/score/index.html">
+                                        <i class="fa fa-bar-chart"></i>成绩管理
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right float-right">
+            <a class="btn btn-primary" data-toggle="collapse" href="#search" role="button" aria-expanded="false"
+                aria-controls="collapseExample">
+                <i class="fa fa-search"></i>查询条件
+            </a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add"><i class="fa fa-plus"></i>添加</button>
+
+            <div id="search" class="collapse">
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="searchKey">班级名称：</label>
+                            <input type="text" class="form-control" id="searchKey">
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group" id="departSearchBox"></div>
+                            <script id="tmpSearchDepart" type="text/html">
+                                <label for="searchDepartId">所属院系：</label>
+                                <select class="form-control" name="searchDepartId" id="searchDepartId">
+                                <option value="all">请选择...</option>
+                                {{each data d i}}
+                                <option value="{{d._id}}">{{d.departName}}</option>
+                                {{/each}}
+                                </select>
+                            </script>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="beginDate">开始日期：</label>
+                                    <input type="text" class="form-control" id="beginDate" onclick="WdatePicker()">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="endDate">结束日期：</label>
+                                    <input type="text" class="form-control" id="endDate" onclick="WdatePicker()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary" id="btnSearch"><i class="fa fa-search"></i>搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box"></div>
+
+            <script id="tmp" type="text/html">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="th1">
+                                <input class="form-check-input selectAll" type="checkbox">
+                            </th>
+                            <th>班级名称</th>
+                            <th>所属院系</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{each data d i}}
+                            <tr>
+                                <td class="td1">
+                                    <input class="form-check-input selectSingle" type="checkbox" value="{{d._id}}">
+                                </td>
+                                <td>{{d.className}}</td>
+                                <td>{{d.class_depart[0].departName}}</td>
+                                <td class="w180">{{d.createTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+                                <td class="w250">
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#detail" data-id="{{d._id}}"><i class="fa fa-list"></i>详情</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit" data-id="{{d._id}}"><i class="fa fa-edit"></i>编辑</button>
+                                    <button type="button" class="btn btn-danger btn-sm delete" data-id="{{d._id}}"><i class="fa fa-remove"></i>删除</button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-danger" id="btnDeleteMore"><i class="fa fa-remove"></i>批量删除</button>
+                    </div>
+                    <div class="col-sm-10 clearfix">
+                        <nav aria-label="Page navigation float-right">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item {{ currPage === 1 ? 'disabled' : ''}}">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Previous" onclick="getData({{currPage - 1}}, {{pageSize}})">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                {{each pages p i}}
+                                <li class="page-item {{ p === currPage ? 'active': ''}}"><a class="page-link" href="javascript:void(0);" onclick="getData({{p}}, {{pageSize}})">{{p}}</a></li>
+                                {{/each}}
+                                <li class="page-item {{ currPage === totalPage ? 'disabled' : ''}}">
+                                    <a class="page-link" href="javascript:void(0);" aria-label="Next" onclick="getData({{currPage + 1}}, {{pageSize}})">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </script>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">添加</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form id="addForm">
+                                <div class="form-group">
+                                    <div class="form-group" id="departBox"></div>
+                                    <script id="tmpDepart" type="text/html">
+                                        <label for="departId">所属院系：</label>
+                                        <select class="form-control" name="departId" id="departId">
+                                            {{each data d i}}
+                                            <option value="{{d._id}}">{{d.departName}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </script>
+                                </div>
+                                <div class="form-group">
+                                    <label for="className">班级名称：</label>
+                                    <input type="text" class="form-control" id="className" name="className">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnSave" hidden><i class="fa fa-save"></i>保存</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnTemp"><i class="fa fa-save"></i>保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">编辑</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"></div>
+
+                        <script id="tmpEdit" type="text/html">
+                            <form id="editForm">
+                                <div class="form-group">
+                                  <label for="editDepartId">所属院系：</label>
+                                  <select class="form-control" name="editDepartId" id="editDepartId">
+                                    {{each departs d i}}
+                                    <option value="{{d._id}}" {{data.departId._id==d._id?'selected':''}}>{{d.departName}}</option>
+                                    {{/each}}
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editClassName">班级名称：</label>
+                                    <input type="text" class="form-control" id="editClassName" name="editClassName" value="{{data.className}}">
+                                    <input type="hidden" id="oldClassName" name="oldClassName" value="{{data.className}}">
+                                    <input type="hidden" id="id" name="id" value="{{data._id}}">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnEdit" hidden><i class="fa fa-save"></i>保存</button>
+                            </form>
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnEditTemp"><i class="fa fa-save"></i>保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">详情</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"></div>
+
+                        <script id="tmpDetail" type="text/html">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">所属院系：{{data.departId.departName}}</li>
+                                <li class="list-group-item">班级名称：{{data.className}}</li>
+                                <li class="list-group-item">创建时间：{{data.createTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</li>
+                                <li class="list-group-item">最后更新时间：{{data.updateTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</li>
+                            </ul>
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i>关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Add rows here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Add rows here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnDelete"><i class="fa fa-check"></i>确定</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close"></i>取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var currPage = 1;
+        var pageSize = 5;
+        var deleteMore = false;
+
+        function getData(page, pageSize) {
+            $.getJSON(`/classes/getClasses/${page}/${pageSize}/`, {
+                searchKey: $('#searchKey').val(),
+                departId: $('#searchDepartId').val() || 'all',
+                beginDate: $('#beginDate').val(),
+                endDate: $('#endDate').val()
+            }).done(function (data) {
+                if (data.code === 200) {
+                    $('.box').html(template('tmp', {
+                        data: data.jsonData,
+                        pages: data.pages,
+                        currPage: data.currPage,
+                        totalPage: data.totalPage,
+                        pageSize: data.pageSize
+                    }));
+                }
+            }).fail(function (err) {
+                console.log(err);
+            })
+        }
+
+        $(function () {
+            getData(currPage, pageSize);
+
+            var departs = [];
+            $.getJSON('/departs/getDeparts').done(function (data) {
+                if (data.code == 200) {
+                    departs = data.jsonData;
+                    $('#departSearchBox').html(template('tmpSearchDepart', { data: departs }));
+                }
+            })
+
+            $('#add').on('show.bs.modal', function (e) {
+                $('#className').val('');
+                $('label.error').hide();
+
+                $('#departBox').html(template('tmpDepart', { data: departs }));
+            })
+
+            $('#btnSave').click(function () {
+                $('#addForm').validate({
+                    rules: {
+                        className: {
+                            required: true,
+                            remote: {
+                                url: '/classes/checkClassName',
+                                type: 'POST',               //数据发送方式
+                                dataType: 'json',           //接受数据格式   
+                                data: {                     //要传递的数据
+                                    className: function () {
+                                        return $("#className").val();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    messages: {
+                        className: {
+                            required: '请输入班级名称',
+                            remote: '班级名称已存在'
+                        }
+                    },
+                    submitHandler: function (form) {
+                        $.post('/classes/addClass', {
+                            departId: $('#departId').val(),
+                            className: $('#className').val(),
+                        }).done(function (data) {
+                            if (data.code !== 200) {
+                                $('#modelId .modal-body').text(data.message);
+                                $('#modelId').modal('show');
+                                return;
+                            }
+                            $('#add').modal('hide');
+                            location.reload();
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                });
+            })
+
+            $('#btnTemp').click(function () {
+                $('#btnSave').trigger('click');
+            })
+
+            $('#edit').on('shown.bs.modal', function (e) {
+                $('label.error').hide();
+                var id = $(e.relatedTarget).data('id');
+                $.getJSON(`/classes/getClass/${id}`).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#edit').modal('hide');
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        return;
+                    }
+
+                    $('#edit .container-fluid').html(template('tmpEdit', { data: data.entry, departs }));
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+            $('#edit .modal-body').on('click', '#btnEdit', function () {
+                $('#editForm').validate({
+                    rules: {
+                        editClassName: {
+                            required: true,
+                            remote: {
+                                url: '/classes/checkClassNameEdit',
+                                type: 'POST',               //数据发送方式
+                                dataType: 'json',           //接受数据格式   
+                                data: {                     //要传递的数据
+                                    className: function () {
+                                        return $("#editClassName").val();
+                                    },
+                                    oldClassName: function () {
+                                        return $('#oldClassName').val();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    messages: {
+                        editClassName: {
+                            required: '请输入班级名称',
+                            remote: '班级名称已存在'
+                        }
+                    },
+                    submitHandler: function (form) {
+                        var id = $('#id').val();
+                        $.post(`/classes/editClass/${id}`, {
+                            departId: $('#editDepartId').val(),
+                            className: $('#editClassName').val(),
+                        }).done(function (data) {
+                            if (data.code !== 200) {
+                                $('#modelId .modal-body').text(data.message);
+                                $('#modelId').modal('show');
+                                return;
+                            }
+                            $('#edit').modal('hide');
+                            location.reload();
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                });
+            })
+
+            $('#btnEditTemp').click(function () {
+                $('#btnEdit').trigger('click');
+            })
+
+            $('#detail').on('show.bs.modal', function (e) {
+                var id = $(e.relatedTarget).data('id');
+                $.getJSON(`/classes/getClass/${id}`).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        $('#edit').modal('hide');
+                        return;
+                    }
+                    $('#detail .container-fluid').html(template('tmpDetail', { data: data.entry }));
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+
+            $('.box').on('click', '.delete', function () {
+                deleteMore = false;
+                var id = $(this).data('id');
+                $('#delete .modal-body').text(`您确定要删除id为[${id}]的这条数据吗？`);
+                $('#btnDelete').data('id', id);
+                $('#delete').modal('show');
+            })
+
+            $('#btnDelete').click(function () {
+                var id = $(this).data('id');
+                var url = deleteMore ? `/classes/removeClasses/${id}` : `/classes/removeClass/${id}`;
+                $.post(url).done(function (data) {
+                    if (data.code !== 200) {
+                        $('#modelId .modal-body').text(data.message);
+                        $('#modelId').modal('show');
+                        return;
+                    }
+                    $('#delete').modal('hide');
+                    location.reload();
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            })
+
+            $('#btnSearch').click(function () {
+                getData(currPage, pageSize);
+            })
+
+            $('.box').on('click', '.selectAll', function () {
+                $('.selectSingle').prop('checked', $(this).prop('checked'));
+            })
+
+            $('.box').on('click', '.selectSingle', function () {
+                $('.selectAll').prop('checked', $('.selectSingle:not(:checked)').length == 0)
+            })
+
+            $('.box').on('click', '#btnDeleteMore', function () {
+                if ($('.selectSingle:checked').length == 0) {
+                    $('#modelId .modal-body').text('请选择要删除的数据！');
+                    $('#modelId').modal('show');
+                    return;
+                }
+                deleteMore = true;
+                var ids = '';
+                $('.selectSingle:checked').each(function (i, ele) {
+                    ids += $(ele).val() + ','
+                })
+                if (ids.length > 0) {
+                    ids = ids.substr(0, ids.length - 1);
+                }
+                $('#delete .modal-body').text(`您确定要删除这些数据吗？`);
+                $('#btnDelete').data('id', ids);
+                $('#delete').modal('show');
+            })
+        })
+    </script>
+</body>
+
+</html>

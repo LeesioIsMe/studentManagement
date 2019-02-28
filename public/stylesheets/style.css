@@ -1,0 +1,107 @@
+.bd-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.pd60 {
+  padding: 0;
+  padding-top: 60px;
+}
+
+.pd15 {
+  padding: 0 15px;
+}
+
+.fs25 {
+  font-size: 25px;
+}
+
+.left {
+  width: 200px;
+  position: fixed;
+  left: 0;
+  top: 60px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
+i.fa {
+  margin-right: 10px;
+}
+
+.nopd {
+  padding: 0;
+}
+
+.active a {
+  color: #fff;
+}
+
+.right {
+  width: calc(100% - 200px);
+  padding: 0 20px;
+}
+
+.right p {
+  text-indent: 2em;
+  font-size: 18px;
+  padding-top: 20px;
+}
+
+.right .table {
+  margin-top: 5px;
+}
+
+#search {
+  margin-top: 5px;
+}
+
+.selectAll {
+  margin-left: 0;
+  margin-top: -17px;
+}
+
+.selectSingle {
+  margin-left: 0;
+}
+
+.w250 {
+  width: 250px;
+}
+
+.w180 {
+  width: 180px;
+}
+
+.w60 {
+  width: 60px;
+}
+
+.pwd {
+  color: red;
+  font-size: 12px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+}
+
+.th1, .td1 {
+  padding-left: 0 !important;
+  text-align: center;
+  width: 50px;
+}
+
+.middle{
+  position: relative;
+  top: 30px;
+}
